@@ -9,7 +9,8 @@ enum class CustomerStatus {
 
 data class Customer(
     val id: String,
-    val name: String,
+    val firstName: String,
+    val lastName: String,
     val phone: String,
     val email: String,
     val status: CustomerStatus,

@@ -1,6 +1,7 @@
 package com.example.crm.customer.repository
 
 import com.example.crm.customer.model.Customer
+import com.example.crm.customer.model.CustomerStatus
 import java.util.concurrent.ConcurrentHashMap
 
 class InMemoryCustomerRepository : ICustomerRepository {
@@ -22,5 +23,9 @@ class InMemoryCustomerRepository : ICustomerRepository {
 
     override fun findAll(): List<Customer> {
         return customers.values.toList()
+    }
+
+    override fun findActive(): List<Customer> {
+        return customers.values.filter { it.status == CustomerStatus.ACTIVE  }
     }
 }
