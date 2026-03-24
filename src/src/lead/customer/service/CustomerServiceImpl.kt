@@ -3,7 +3,7 @@ package com.example.crm.customer.service
 import com.example.crm.customer.model.Customer
 import com.example.crm.customer.repository.ICustomerRepository
 
-class CustomerServiceImpl(private val customerRepository: ICustomerRepository) : CustomerService {
+open class CustomerServiceImpl(private val customerRepository: ICustomerRepository) : CustomerService {
     override fun createCustomer(customer: Customer): Customer {
         validateCustomer(customer)
         return customerRepository.create(customer)

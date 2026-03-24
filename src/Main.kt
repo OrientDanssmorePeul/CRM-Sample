@@ -2,11 +2,12 @@ package com.example.crm.app
 
 import com.example.crm.customer.model.Customer
 import com.example.crm.customer.model.CustomerStatus
+import com.example.crm.customer.model.LostCustomer
 import com.example.crm.customer.repository.InMemoryCustomerRepository
+import com.example.crm.customer.repository.InMemoryLostCustomerRepository
+import com.example.crm.customer.service.LostCustomerServiceImpl
 import com.example.crm.customer.service.PremiumCustomerServiceImpl
-import com.example.crm.customer.usecase.CreateCustomerUseCase
-import com.example.crm.customer.usecase.FindCustomerByIdUseCase
-import com.example.crm.customer.usecase.ListCustomersUseCase
+import com.example.crm.customer.usecase.*
 import com.example.crm.lead.model.Lead
 import com.example.crm.lead.model.LeadStatus
 import com.example.crm.lead.repository.InMemoryLeadRepository
@@ -23,6 +24,15 @@ fun main() {
     val createCustomerUseCase = CreateCustomerUseCase(customerService)
     val findCustomerByIdUseCase = FindCustomerByIdUseCase(customerService)
     val listCustomersUseCase = ListCustomersUseCase(customerService)
+
+    val lostCustomerRepository = InMemoryLostCustomerRepository()
+    val lostCustomerService = LostCustomerServiceImpl(lostCustomerRepository, customerRepository)
+    val createLostCustomerUseCase = CreateLostCustomerUseCase(lostCustomerService)
+    val updateLostCustomerUseCase = UpdateLostCustomerUseCase(lostCustomerService)
+    val findLostCustomerByIdUseCase = FindLostCustomerByIdUseCase(lostCustomerService)
+    val listLostCustomersUseCase = ListLostCustomersUseCase(lostCustomerService)
+    val deleteLostCustomerUseCase = DeleteCustomerUseCase(lostCustomerService)
+
 
     val leadRepository = InMemoryLeadRepository()
     val leadService = LeadServiceImpl(leadRepository, customerRepository, customerService)
@@ -82,7 +92,7 @@ fun main() {
         name = "Charlie Brown",
         phone = "987-654-3210",
         email = "charlie.brown@example.com",
-        status = CustomerStatus.ACTIVE,
+        status = CustomerStatus.LOST,
         createdAt = LocalDateTime.now(),
         isPremium = false
     )
@@ -112,6 +122,19 @@ fun main() {
     listCustomersUseCase.execute().forEach { println(it) }
     println("Leads:")
     listLeadsUseCase.execute().forEach { println(it) }
+    val lostCustomer1 = LostCustomer(
+        customerId = "4",
+        reasonLost =  "Retired",
+        lostDate = LocalDateTime.now(),
+        notes = "Quit"
+    )
+    val createdLostCustomer = createLostCustomerUseCase.execute(lostCustomer1)
+    println(createdLostCustomer)
+    val findLostCustomer = findLostCustomerByIdUseCase.execute("99")
+    println(findLostCustomer)
+    val deleteLostCustomer = deleteLostCustomerUseCase.execute("99")
+    val findLostCustomer1 = findLostCustomerByIdUseCase.execute("99")
+    println(findLostCustomer1)
 }
 //fun main() {
 //    val customerRepository = InMemoryCustomerRepository()

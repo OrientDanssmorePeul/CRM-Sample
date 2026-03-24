@@ -33,7 +33,8 @@ class LeadServiceImpl(
             phone = lead.contactInfo,
             email = lead.contactInfo,
             status = CustomerStatus.ACTIVE,
-            createdAt = LocalDateTime.now()
+            createdAt = LocalDateTime.now(),
+            isPremium = false
         )
         return customerService.createCustomer(customer)
     }
