@@ -3,10 +3,10 @@ package com.example.crm.app
 import com.example.crm.customer.model.Customer
 import com.example.crm.customer.model.CustomerStatus
 import com.example.crm.customer.repository.InMemoryCustomerRepository
+import com.example.crm.customer.repository.PremiumInMemoryCustomerRepository
+import com.example.crm.customer.service.CustomerServiceImpl
 import com.example.crm.customer.service.PremiumCustomerServiceImpl
-import com.example.crm.customer.usecase.CreateCustomerUseCase
-import com.example.crm.customer.usecase.FindCustomerByIdUseCase
-import com.example.crm.customer.usecase.ListCustomersUseCase
+import com.example.crm.customer.usecase.*
 import com.example.crm.lead.model.Lead
 import com.example.crm.lead.model.LeadStatus
 import com.example.crm.lead.repository.InMemoryLeadRepository
@@ -18,11 +18,13 @@ import com.example.crm.lead.usecase.ListLeadsUseCase
 import java.time.LocalDateTime
 
 fun main() {
-    val customerRepository = InMemoryCustomerRepository()
+    val customerRepository = PremiumInMemoryCustomerRepository()
     val customerService = PremiumCustomerServiceImpl(customerRepository)
     val createCustomerUseCase = CreateCustomerUseCase(customerService)
+    val updateCustomerUseCase = UpdateCustomerUseCase(customerService)
     val findCustomerByIdUseCase = FindCustomerByIdUseCase(customerService)
     val listCustomersUseCase = ListCustomersUseCase(customerService)
+    val listActiveCustomersUseCase = ListActiveCustomersUseCase(customerService)
 
     val leadRepository = InMemoryLeadRepository()
     val leadService = LeadServiceImpl(leadRepository, customerRepository, customerService)
@@ -34,7 +36,8 @@ fun main() {
     // Create 3 leads
     val lead1 = Lead(
         id = "1",
-        name = "Jane Doe",
+        firstName = "Jane",
+        lastName = "Doe",
         contactInfo = "jane.doe@example.com",
         source = "Referral",
         status = LeadStatus.NEW,
@@ -46,7 +49,8 @@ fun main() {
 
     val lead2 = Lead(
         id = "2",
-        name = "Alice Johnson",
+        firstName = "Jane2",
+        lastName = "Doe2",
         contactInfo = "alice.johnson@example.com",
         source = "Email",
         status = LeadStatus.NEW,
@@ -58,7 +62,8 @@ fun main() {
 
     val lead3 = Lead(
         id = "3",
-        name = "Bob Smith",
+        firstName = "Jane3",
+        lastName = "Doe3",
         contactInfo = "bob.smith@example.com",
         source = "Social Media",
         status = LeadStatus.NEW,
@@ -76,27 +81,31 @@ fun main() {
     val convertedCustomer = convertLeadToCustomerUseCase.execute("1")
     println("Converted Lead 1 to Customer: $convertedCustomer")
 
+    println("Leads:")
+    listLeadsUseCase.execute().forEach { println(it) }
     // Create 2 customers directly
     val customer1 = Customer(
-        id = "4",
-        name = "Charlie Brown",
+        id = "1",
+        firstName = "Jane3",
+        lastName = "Doe3",
         phone = "987-654-3210",
         email = "charlie.brown@example.com",
         status = CustomerStatus.ACTIVE,
         createdAt = LocalDateTime.now(),
-        isPremium = false
+        isPremium = true
     )
     val createdCustomer1 = createCustomerUseCase.execute(customer1)
     println("Created Customer 1: $createdCustomer1")
 
     val customer2 = Customer(
-        id = "5",
-        name = "Diana Prince",
+        id = "2",
+        firstName = "Jane3",
+        lastName = "Doe3",
         phone = "555-555-5555",
         email = "diana.prince@example.com",
         status = CustomerStatus.ACTIVE,
         createdAt = LocalDateTime.now(),
-        isPremium = true
+        isPremium = false
     )
     val createdCustomer2 = createCustomerUseCase.execute(customer2)
     println("Created Customer 2: $createdCustomer2")
@@ -110,15 +119,18 @@ fun main() {
     println("CRM Summary:")
     println("Customers:")
     listCustomersUseCase.execute().forEach { println(it) }
-    println("Leads:")
-    listLeadsUseCase.execute().forEach { println(it) }
+    findCustomerByIdUseCase.execute("1")
+    listActiveCustomersUseCase.execute().forEach { println(it) }
+    updateCustomerUseCase.execute(customer1)
 }
+
 //fun main() {
 //    val customerRepository = InMemoryCustomerRepository()
 //    val customerService = CustomerServiceImpl(customerRepository)
 //    val createCustomerUseCase = CreateCustomerUseCase(customerService)
 //    val findCustomerByIdUseCase = FindCustomerByIdUseCase(customerService)
 //    val listCustomersUseCase = ListCustomersUseCase(customerService)
+//    val listActiveCustomersUseCase = ListActiveCustomersUseCase(customerService)
 //
 //    val leadRepository = InMemoryLeadRepository()
 //    val leadService = LeadServiceImpl(leadRepository, customerRepository, customerService)
@@ -130,7 +142,8 @@ fun main() {
 //    // Create 3 leads
 //    val lead1 = Lead(
 //        id = "1",
-//        name = "Jane Doe",
+//        firstName = "Jane",
+//        lastName = "Doe",
 //        contactInfo = "jane.doe@example.com",
 //        source = "Referral",
 //        status = LeadStatus.NEW,
@@ -142,7 +155,8 @@ fun main() {
 //
 //    val lead2 = Lead(
 //        id = "2",
-//        name = "Alice Johnson",
+//        firstName = "Jane2",
+//        lastName = "Doe2",
 //        contactInfo = "alice.johnson@example.com",
 //        source = "Email",
 //        status = LeadStatus.NEW,
@@ -154,7 +168,8 @@ fun main() {
 //
 //    val lead3 = Lead(
 //        id = "3",
-//        name = "Bob Smith",
+//        firstName = "Jane3",
+//        lastName = "Doe3",
 //        contactInfo = "bob.smith@example.com",
 //        source = "Social Media",
 //        status = LeadStatus.NEW,
@@ -174,8 +189,9 @@ fun main() {
 //
 //    // Create 2 customers directly
 //    val customer1 = Customer(
-//        id = "4",
-//        name = "Charlie Brown",
+//        id = "1",
+//        firstName = "Jane3",
+//        lastName = "Doe3",
 //        phone = "987-654-3210",
 //        email = "charlie.brown@example.com",
 //        status = CustomerStatus.ACTIVE,
@@ -185,11 +201,12 @@ fun main() {
 //    println("Created Customer 1: $createdCustomer1")
 //
 //    val customer2 = Customer(
-//        id = "5",
-//        name = "Diana Prince",
+//        id = "2",
+//        firstName = "Jane3",
+//        lastName = "Doe3",
 //        phone = "555-555-5555",
 //        email = "diana.prince@example.com",
-//        status = CustomerStatus.ACTIVE,
+//        status = CustomerStatus.INACTIVE,
 //        createdAt = LocalDateTime.now()
 //    )
 //    val createdCustomer2 = createCustomerUseCase.execute(customer2)
@@ -206,4 +223,7 @@ fun main() {
 //    listCustomersUseCase.execute().forEach { println(it) }
 //    println("Leads:")
 //    listLeadsUseCase.execute().forEach { println(it) }
+//
+//    findCustomerByIdUseCase.execute("2")
+//    listActiveCustomersUseCase.execute().forEach { println(it) }
 //}

@@ -10,7 +10,8 @@ enum class LeadStatus {
 
 data class Lead(
     val id: String,
-    val name: String,
+    val firstName: String,
+    val lastName: String,
     val contactInfo: String,
     val source: String,
     val status: LeadStatus,

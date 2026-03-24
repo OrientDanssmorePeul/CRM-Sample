@@ -29,11 +29,13 @@ class LeadServiceImpl(
         val lead = leadRepository.findById(leadId) ?: throw IllegalArgumentException("Lead not found")
         val customer = Customer(
             id = lead.id,
-            name = lead.name,
+            firstName = lead.firstName,
+            lastName = lead.lastName,
             phone = lead.contactInfo,
             email = lead.contactInfo,
             status = CustomerStatus.ACTIVE,
-            createdAt = LocalDateTime.now()
+            createdAt = LocalDateTime.now(),
+            isPremium = false
         )
         return customerService.createCustomer(customer)
     }
@@ -44,7 +46,8 @@ class LeadServiceImpl(
 
     private fun validateLead(lead: Lead) {
         require(lead.id.isNotBlank()) { "Lead ID cannot be blank" }
-        require(lead.name.isNotBlank()) { "Lead name cannot be blank" }
+        require(lead.firstName.isNotBlank()) {"Lead firstName cannot be blank"}
+        require(lead.lastName.isNotBlank()) {"Lead firstName cannot be blank"}
         require(lead.contactInfo.isNotBlank()) { "Lead contact info cannot be blank" }
         require(lead.source.isNotBlank()) { "Lead source cannot be blank" }
         require(lead.status != null) { "Lead status cannot be null" }
