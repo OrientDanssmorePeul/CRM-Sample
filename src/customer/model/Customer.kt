@@ -4,7 +4,8 @@ import java.time.LocalDateTime
 
 enum class CustomerStatus {
     ACTIVE,
-    INACTIVE
+    INACTIVE,
+    LOST
 }
 
 data class Customer(
@@ -17,3 +18,12 @@ data class Customer(
     val createdAt: LocalDateTime,
     val isPremium: Boolean
 )
+
+data class LostCustomer(
+    val customerId: String,
+    val reasonLost: String,
+    val lostDate: LocalDateTime,
+    val notes: String
+)
+
+
