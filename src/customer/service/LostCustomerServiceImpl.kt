@@ -1,9 +1,9 @@
-package com.example.crm.customer.service
+package com.example.crm.app.customer.service
 
 import com.example.crm.customer.model.CustomerStatus
 import com.example.crm.customer.model.LostCustomer
 import com.example.crm.customer.repository.ICustomerRepository
-import com.example.crm.customer.repository.ILostCustomerRepository
+import com.example.crm.app.customer.repository.ILostCustomerRepository
 
 open class LostCustomerServiceImpl(private val lostCustomerRepository: ILostCustomerRepository
 ,private val customerRepository: ICustomerRepository ) : LostCustomerService {

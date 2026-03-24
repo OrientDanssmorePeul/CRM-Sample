@@ -7,4 +7,5 @@ interface CustomerService {
     fun updateCustomer(customer: Customer): Customer
     fun findCustomerById(id: String): Customer?
     fun listCustomers(): List<Customer>
+    fun listActiveCustomers(): List<Customer>
 }

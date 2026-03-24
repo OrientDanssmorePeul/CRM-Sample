@@ -1,4 +1,4 @@
-package com.example.crm.customer.service
+package com.example.crm.app.customer.service
 
 import com.example.crm.customer.model.LostCustomer
 

@@ -1,11 +1,12 @@
 package com.example.crm.app
 
+import com.example.crm.app.customer.repository.InMemoryLostCustomerRepository
+import com.example.crm.app.customer.service.LostCustomerServiceImpl
+import com.example.crm.app.customer.usecase.*
 import com.example.crm.customer.model.Customer
 import com.example.crm.customer.model.CustomerStatus
 import com.example.crm.customer.model.LostCustomer
 import com.example.crm.customer.repository.InMemoryCustomerRepository
-import com.example.crm.customer.repository.InMemoryLostCustomerRepository
-import com.example.crm.customer.service.LostCustomerServiceImpl
 import com.example.crm.customer.service.PremiumCustomerServiceImpl
 import com.example.crm.customer.usecase.*
 import com.example.crm.lead.model.Lead
@@ -44,7 +45,8 @@ fun main() {
     // Create 3 leads
     val lead1 = Lead(
         id = "1",
-        name = "Jane Doe",
+        firstName = "Jane",
+        lastName = "Doe",
         contactInfo = "jane.doe@example.com",
         source = "Referral",
         status = LeadStatus.NEW,
@@ -56,7 +58,8 @@ fun main() {
 
     val lead2 = Lead(
         id = "2",
-        name = "Alice Johnson",
+        firstName = "Johnson",
+        lastName = "Alice",
         contactInfo = "alice.johnson@example.com",
         source = "Email",
         status = LeadStatus.NEW,
@@ -68,7 +71,8 @@ fun main() {
 
     val lead3 = Lead(
         id = "3",
-        name = "Bob Smith",
+        firstName = "Bob",
+        lastName = " Smith",
         contactInfo = "bob.smith@example.com",
         source = "Social Media",
         status = LeadStatus.NEW,
@@ -83,25 +87,27 @@ fun main() {
     println("Assigned Lead 1 to salesperson1: $assignedLead")
 
     // Convert one lead into a customer
-    val convertedCustomer = convertLeadToCustomerUseCase.execute("1")
-    println("Converted Lead 1 to Customer: $convertedCustomer")
+//    val convertedCustomer = convertLeadToCustomerUseCase.execute("1")
+//    println("Converted Lead 1 to Customer: $convertedCustomer")
 
     // Create 2 customers directly
     val customer1 = Customer(
         id = "4",
-        name = "Charlie Brown",
+        firstName = "Bob",
+        lastName = " Smith",
         phone = "987-654-3210",
         email = "charlie.brown@example.com",
         status = CustomerStatus.LOST,
         createdAt = LocalDateTime.now(),
         isPremium = false
     )
-    val createdCustomer1 = createCustomerUseCase.execute(customer1)
-    println("Created Customer 1: $createdCustomer1")
+//    val createdCustomer1 = createCustomerUseCase.execute(customer1)
+//    println("Created Customer 1: $createdCustomer1")
 
     val customer2 = Customer(
         id = "5",
-        name = "Diana Prince",
+        firstName = "Bob",
+        lastName = " Smith",
         phone = "555-555-5555",
         email = "diana.prince@example.com",
         status = CustomerStatus.ACTIVE,
